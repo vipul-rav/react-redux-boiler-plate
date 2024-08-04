@@ -1,1 +1,1 @@
-export { SampleContainer as default } from './SampleContainer';
+export { SampleScreen as default } from './SampleScreen';

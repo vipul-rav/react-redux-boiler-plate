@@ -1,28 +1,29 @@
-import React, { memo, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { memo, useContext, useEffect } from 'react';
 import { SampleComponent } from './SampleComponent';
+import { useDispatch, useSelector } from 'react-redux';
+import { ContentContext } from '../../context/contentContext';
+import { getPostList } from '../../redux/actions/postAction';
+import { navigateToNextScreen } from '../../redux/actions/navigationAction';
 
-const SampleScreen = memo(function Sample({ getPostList, navigateToNextScreen, content, postList }) {
+const SampleScreen = memo(function Sample() {
+    const dispatch = useDispatch();
+    const content = useContext(ContentContext);
+
     useEffect(() => {
-        getPostList();
-    }, [getPostList]);
+        dispatch(getPostList());
+    }, [getPostList, dispatch]);
+
+    const { postList } = useSelector((state) => state.post);
 
     return (
         <div>
             <h1>{content.homePageText}</h1>
             <SampleComponent postList={postList} content={content} />
-            <button id="btnContinue" onClick={() => navigateToNextScreen('/sample')}>
+            <button id="btnContinue" onClick={() => dispatch(navigateToNextScreen('/sample'))}>
                 <span>{content.btnContinue}</span>
             </button>
         </div>
     );
 });
-
-SampleScreen.propTypes = {
-    navigateToNextScreen: PropTypes.func,
-    content: PropTypes.object.isRequired,
-    getPostList: PropTypes.func,
-    postList: PropTypes.array
-};
 
 export { SampleScreen };

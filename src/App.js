@@ -8,6 +8,7 @@ import { HeaderComponent } from './components/Header';
 import { ErrorComponent } from './components/Error';
 import { withContent } from './hocs/withContent';
 import { useNavigate } from 'react-router-dom';
+import { ContentContext } from './context/contentContext';
 
 const AppComponent = memo(function App() {
     window.navigate = useNavigate();
@@ -21,13 +22,15 @@ const AppComponent = memo(function App() {
     }
     return (
         <div>
-            <HeaderComponent />
-            <div>
-                <ErrorComponent hasError={error.showError} content={content}>
-                    <AppRouter />
-                    <LoaderComponent isLoading={loader.loading} text={content.loadingText} />
-                </ErrorComponent>
-            </div>
+            <ContentContext.Provider value={content}>
+                <HeaderComponent />
+                <div>
+                    <ErrorComponent hasError={error.showError} content={content}>
+                        <AppRouter />
+                        <LoaderComponent isLoading={loader.loading} text={content.loadingText} />
+                    </ErrorComponent>
+                </div>
+            </ContentContext.Provider>
         </div>
     );
 });
